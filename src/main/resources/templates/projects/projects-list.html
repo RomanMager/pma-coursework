@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Projects</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <!--<form method="post" th:action="@{/projects/filter}">-->
+        <a th:href="@{/projects/new}">
+            Create new project
+        </a>
+        <hr>
+        <form method="post" th:action="@{/projects/filter}">
+            <label>
+                <input name="filter" type="text">
+            </label>
+            <button type="submit">Search Projects</button>
+        </form>
+        <hr>
+        <table>
+            <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Name</th>
+            </tr>
+            </thead>
+
+            <tbody style="">
+            <tr th:each="project : ${projects}">
+                <td th:text="${project.projectId}"></td>
+                <!--<a th:href="@{${project.projectId}/tasks}">-->
+                <td th:text="${project.name}"></td>
+                <!--</a>-->
+                <td>
+                    <a th:href="@{'/projects/edit/' + ${project.projectId}}">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
