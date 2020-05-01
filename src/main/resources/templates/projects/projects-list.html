@@ -30,17 +30,18 @@
             <tr>
                 <th>Project ID</th>
                 <th>Project Name</th>
+                <th>Project Lead</th>
             </tr>
             </thead>
 
-            <tbody style="">
+            <tbody>
             <tr th:each="project : ${projects}">
                 <td th:text="${project.projectId}"></td>
-                <!--<a th:href="@{${project.projectId}/tasks}">-->
-                <td th:text="${project.name}"></td>
-                <!--</a>-->
                 <td>
-                    <a th:href="@{'/projects/edit/' + ${project.projectId}}">Edit</a>
+                    <a th:href="@{/projects/view/{id}(id = ${project.projectId})}" th:text="${project.name}"></a>
+                </td>
+                <td>
+                    <button><a th:href="@{/projects/edit/{id}(id = ${project.projectId})}">Edit</a></button>
                 </td>
             </tr>
             </tbody>

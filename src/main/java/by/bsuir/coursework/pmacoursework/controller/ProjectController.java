@@ -6,11 +6,11 @@ import by.bsuir.coursework.pmacoursework.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Controller
@@ -63,8 +63,55 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/save")
-    public String createProject(Project project, Model model) {
+    public String createProject(@Valid Project project, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "projects/new-project";
+        }
+
         projectService.save(project);
+
+        return "redirect:/projects";
+    }
+
+    @GetMapping(value = "/view/{id}")
+    public String viewProject(@PathVariable Long id, Model model) {
+        Project project = projectRepository.findById(id)
+                                           .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
+
+        model.addAttribute("project", project);
+
+        return "projects/project-view";
+    }
+
+    @GetMapping(value = "/edit/{id}")
+    public String displayProjectEditForm(@PathVariable Long id, Model model) {
+        Project project = projectRepository.findById(id)
+                                           .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
+
+        model.addAttribute("project", project);
+
+        return "projects/project-edit";
+    }
+
+    @PostMapping(value = "/update/{id}")
+    public String updateProject(@PathVariable(value = "id") @NotNull Long id, @Valid Project project,
+                                BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            project.setProjectId(id);
+            return "projects/project-edit";
+        }
+
+        projectService.save(project);
+
+        return "redirect:/projects";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String deleteProject(@PathVariable Long id, Model model) {
+        Project project = projectRepository.findById(id)
+                                           .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
+
+        projectRepository.delete(project);
 
         return "redirect:/projects";
     }

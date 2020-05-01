@@ -7,17 +7,22 @@
 <body>
     <nav></nav>
     <div>
-        <form method="post" th:action="@{/projects/save}" th:object="${project}">
-            <label for="project-name">
-                <input id="project-name" placeholder="Project Name" th:field="${project.name}" type="text">
-            </label>
+        <form action="#" method="post" th:action="@{/projects/save}" th:object="${project}">
+            <div>
+                <label for="project-name">
+                    <input id="project-name" placeholder="Project Name" th:field="*{name}" type="text">
+                </label>
+                <span th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
+            </div>
 
-            <label for="project-description">
+            <div>
+                <label for="project-description">
                 <textarea id="project-description" placeholder="Enter Project Description"
-                          th:field="${project.description}"
+                          th:field="*{description}"
                           type="text">
                 </textarea>
-            </label>
+                </label>
+            </div>
 
             <button type="submit">Create Project</button>
         </form>
