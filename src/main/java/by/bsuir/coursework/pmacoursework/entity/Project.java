@@ -4,26 +4,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @Entity
-// @Table(name = "projects")
+@Table(name = "Projects")
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "project_id")
     private Long projectId;
 
+    @Size(min = 5, max = 60)
+    @NotBlank(message = "You must specify project name!")
     @Column(name = "project_name")
-    @Size(max = 50)
-    @NotNull(message = "You must specify project name!")
     private String name;
 
     @Size(max = 400)
     private String description;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Task> tasks;
 
     public Project(String name, String description) {
         this.name = name;
