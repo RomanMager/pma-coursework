@@ -30,6 +30,7 @@
             <tr>
                 <th>Project ID</th>
                 <th>Project Name</th>
+                <th>Project Status</th>
                 <th>Project Lead</th>
             </tr>
             </thead>
@@ -41,6 +42,8 @@
                     <!--<a th:href="@{/projects/{id}(id = ${project.projectId})}" th:text="${project.name}"></a>-->
                     <a th:href="@{/projects/{id}/tasks (id = ${project.projectId})}" th:text="${project.name}"></a>
                 </td>
+                <td th:text="${project.status.title}"></td>
+                <td></td>
                 <td>
                     <button><a th:href="@{/projects/edit/{id}(id = ${project.projectId})}">Edit</a></button>
                 </td>

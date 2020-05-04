@@ -1,19 +1,30 @@
 DROP TABLE IF EXISTS Tasks;
 DROP TABLE IF EXISTS Projects;
+DROP TABLE IF EXISTS Project_Status;
 -- #############################
 -- #############################
+
+CREATE TABLE IF NOT EXISTS Project_Status
+(
+    status_id BIGINT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title     VARCHAR(20) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS Projects
 (
     project_id   BIGINT      NOT NULL AUTO_INCREMENT,
     project_name VARCHAR(50) NOT NULL,
     description  VARCHAR(400),
-    PRIMARY KEY (project_id)
+
+    status_id    BIGINT      NOT NULL,
+
+    PRIMARY KEY (project_id),
+    FOREIGN KEY (status_id) REFERENCES Project_Status (status_id)
 );
 
 CREATE TABLE IF NOT EXISTS Tasks
 (
-    task_id      INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    task_id      BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title        VARCHAR(100) NOT NULL,
     description  VARCHAR(250),
     is_completed BOOLEAN,
@@ -21,24 +32,35 @@ CREATE TABLE IF NOT EXISTS Tasks
 
     FOREIGN KEY (project_id) REFERENCES Projects (project_id)
 );
+
 -- #############################
 -- #############################
 
+INSERT INTO Project_Status(status_id, title)
+VALUES (1, 'Active');
 
-INSERT INTO projects(project_name, description)
-VALUES ('Demo project #1', 'Demo description #1');
+INSERT INTO Project_Status(status_id, title)
+VALUES (2, 'On Hold');
 
-INSERT INTO projects(project_name, description)
-VALUES ('Demo project #2', 'Demo description #2');
+INSERT INTO Project_Status(status_id, title)
+VALUES (3, 'Completed');
+-- #############################
 
-INSERT INTO projects(project_name, description)
-VALUES ('Demo project #3', 'Demo description #3');
 
-INSERT INTO projects(project_name, description)
-VALUES ('Sample project #1', 'Sample description #1');
+INSERT INTO projects(project_name, description, status_id)
+VALUES ('Demo project #1', 'Demo description #1', 1);
 
-INSERT INTO projects(project_name, description)
-VALUES ('Sample project #2', 'Sample description #2');
+INSERT INTO projects(project_name, description, status_id)
+VALUES ('Demo project #2', 'Demo description #2', 2);
+
+INSERT INTO projects(project_name, description, status_id)
+VALUES ('Demo project #3', 'Demo description #3', 1);
+
+INSERT INTO projects(project_name, description, status_id)
+VALUES ('Sample project #1', 'Sample description #1', 1);
+
+INSERT INTO projects(project_name, description, status_id)
+VALUES ('Sample project #2', 'Sample description #2', 3);
 -- #############################
 
 

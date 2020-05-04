@@ -1,7 +1,9 @@
 package by.bsuir.coursework.pmacoursework.controller;
 
 import by.bsuir.coursework.pmacoursework.entity.Project;
+import by.bsuir.coursework.pmacoursework.entity.ProjectStatus;
 import by.bsuir.coursework.pmacoursework.repository.ProjectRepository;
+import by.bsuir.coursework.pmacoursework.repository.ProjectStatusRepository;
 import by.bsuir.coursework.pmacoursework.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +21,15 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
+    private final ProjectStatusRepository statusRepository;
 
     @Autowired
     public ProjectController(ProjectService projectService,
-                             ProjectRepository projectRepository) {
+                             ProjectRepository projectRepository,
+                             ProjectStatusRepository statusRepository) {
         this.projectService = projectService;
         this.projectRepository = projectRepository;
+        this.statusRepository = statusRepository;
     }
 
     @GetMapping
@@ -58,7 +63,10 @@ public class ProjectController {
         // todo: Add employees to the project
         //  - ? show only employees which are ruled by a specific manager.
 
+        List<ProjectStatus> projectStatuses = statusRepository.findAll();
+
         model.addAttribute("project", newProject);
+        model.addAttribute("projectStatuses", projectStatuses);
 
         return "projects/new-project";
     }
@@ -87,8 +95,10 @@ public class ProjectController {
     public String displayProjectEditForm(@PathVariable Long id, Model model) {
         Project project = projectRepository.findById(id)
                                            .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
+        List<ProjectStatus> projectStatuses = statusRepository.findAll();
 
         model.addAttribute("project", project);
+        model.addAttribute("projectStatuses", projectStatuses);
 
         return "projects/project-edit";
     }
