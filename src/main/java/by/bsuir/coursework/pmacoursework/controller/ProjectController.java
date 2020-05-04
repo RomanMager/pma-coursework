@@ -36,7 +36,8 @@ public class ProjectController {
         return "projects/projects-list";
     }
 
-    @PostMapping(value = "/filter")
+    // @PostMapping(value = "/filter")
+    @PostMapping
     public String filterProject(Model model, @RequestParam String filter) {
         List<Project> projects;
 
@@ -67,21 +68,20 @@ public class ProjectController {
         if (result.hasErrors()) {
             return "projects/new-project";
         }
-
         projectService.save(project);
 
         return "redirect:/projects";
     }
 
-    @GetMapping(value = "/view/{id}")
-    public String viewProject(@PathVariable Long id, Model model) {
-        Project project = projectRepository.findById(id)
-                                           .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
-
-        model.addAttribute("project", project);
-
-        return "projects/project-view";
-    }
+    // @GetMapping(value = "/{id}")
+    // public String viewProject(@PathVariable Long id, Model model) {
+    //     Project project = projectRepository.findById(id)
+    //                                        .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
+    //
+    //     model.addAttribute("project", project);
+    //
+    //     return "projects/project-view";
+    // }
 
     @GetMapping(value = "/edit/{id}")
     public String displayProjectEditForm(@PathVariable Long id, Model model) {
@@ -94,7 +94,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String updateProject(@PathVariable(value = "id") @NotNull Long id, @Valid Project project,
+    public String updateProject(@PathVariable @NotNull Long id, @Valid Project project,
                                 BindingResult result, Model model) {
         if (result.hasErrors()) {
             project.setProjectId(id);
