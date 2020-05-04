@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Task</title>
+</head>
+<body>
+    <div>
+        <form action="#" method="post"
+              th:action="@{/projects/{id}/tasks/update (id = ${projectId})}"
+              th:object="${task}">
+            <input th:field="${task.id}" th:name="taskId" type="hidden">
+
+            <input th:field="${task.title}" type="text">
+            <textarea th:field="${task.description}" type="text">
+            </textarea>
+
+            <input th:field="${task.project}" type="hidden">
+            <button type="submit">Update Task</button>
+        </form>
+
+        <form action="#" method="post"
+              th:action="@{/projects/{id}/tasks/delete (id = ${projectId})}"
+              th:object="${task}"
+        >
+            <!--<input th:field="${task.id}" th:name="taskId" type="hidden">-->
+            <button th:name="taskId" th:value="${task.id}" type="submit">Delete</button>
+        </form>
+    </div>
+</body>
+</html>
