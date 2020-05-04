@@ -28,6 +28,12 @@ public class Project {
     @Size(max = 400)
     private String description;
 
+    // @OneToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "status_id", referencedColumnName = "status_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "status_id")
+    private ProjectStatus status;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Task> tasks;
 

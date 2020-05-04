@@ -23,6 +23,7 @@
                 <tr>
                     <th>Project Name</th>
                     <th>Project Description</th>
+                    <th>Project Status</th>
                     <th>Project Lead</th>
                 </tr>
                 </thead>
@@ -43,6 +44,15 @@
                                       type="text">
                             </textarea>
                         </label>
+                    </td>
+
+                    <td>
+                        <select id="status-selector" name="" th:field="*{status}">
+                            <option th:each="status : ${projectStatuses}"
+                                    th:text="${status.title}"
+                                    th:value="${status.id}">
+                            </option>
+                        </select>
                     </td>
                 </tr>
                 </tbody>
