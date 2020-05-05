@@ -1,11 +1,18 @@
 DROP TABLE IF EXISTS Tasks;
 DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Project_Status;
+DROP TABLE IF EXISTS Task_Type;
 
 CREATE TABLE IF NOT EXISTS Project_Status
 (
     status_id BIGINT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title     VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Task_Type
+(
+    type_id BIGINT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title   VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Projects
@@ -26,7 +33,10 @@ CREATE TABLE IF NOT EXISTS Tasks
     title        VARCHAR(100) NOT NULL,
     description  VARCHAR(250),
     is_completed BOOLEAN,
-    project_id   BIGINT       NOT NULL,
 
-    FOREIGN KEY (project_id) REFERENCES Projects (project_id)
+    project_id   BIGINT       NOT NULL,
+    type_id      BIGINT       NOT NULL,
+
+    FOREIGN KEY (project_id) REFERENCES Projects (project_id),
+    FOREIGN KEY (type_id) REFERENCES Task_Type (type_id)
 );
