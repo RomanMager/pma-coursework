@@ -7,6 +7,7 @@
 <body>
     <div>
 
+        <!-- Project info -->
         <div>
             <table>
                 <thead>
@@ -38,21 +39,29 @@
 
         <hr>
 
+        <!-- Add a new task -->
         <div>
             <form action="#" method="post"
                   th:action="@{/projects/{id}/tasks/new (id = ${project.projectId})}"
-                  th:object="${task}"
-            >
+                  th:object="${task}">
                 <input th:field="*{id}" type="hidden">
 
                 <label for="task-title">
                     <input id="task-title" placeholder="Buy milk..." th:field="*{title}" type="text">
                 </label>
+
                 <label for="task-description">
                     <textarea id="task-description" placeholder="Task Description"
                               th:field="*{description}" type="text">
                     </textarea>
                 </label>
+
+                <select id="task-type-selector" th:field="*{type}">
+                    <option th:each="type : ${taskTypes}"
+                            th:text="${type.title}"
+                            th:value="${type.id}"
+                    ></option>
+                </select>
 
                 <button type="submit">Add Task</button>
             </form>
@@ -60,12 +69,14 @@
 
         <hr>
 
+        <!-- Tasks List -->
         <div>
             <table>
                 <thead>
                 <tr>
                     <th>Task ID</th>
                     <th>Task Name</th>
+                    <th>Task Type</th>
                     <th>Task Description</th>
                 </tr>
                 </thead>
@@ -74,6 +85,7 @@
                 <tr th:each="task : ${availableTasks}" th:object="${availableTasks}">
                     <td th:text="${task.id}"></td>
                     <td th:text="${task.title}"></td>
+                    <td th:text="${task.type.title}"></td>
                     <td th:text="${task.description}"></td>
                     <td>
                         <button>

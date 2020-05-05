@@ -43,13 +43,9 @@ public class Project {
     }
 
     /*
-    private Status status;
-
     private Employee projectLead;
 
     private Set<Employee> employees;
-
-    private Set<Task> tasks;
     */
 
     @Override
