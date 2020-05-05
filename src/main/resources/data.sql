@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS Tasks;
 DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Project_Status;
+DROP TABLE IF EXISTS Task_Type;
 -- #############################
 -- #############################
 
@@ -8,6 +9,12 @@ CREATE TABLE IF NOT EXISTS Project_Status
 (
     status_id BIGINT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     title     VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Task_Type
+(
+    type_id BIGINT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title   VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Projects
@@ -28,9 +35,12 @@ CREATE TABLE IF NOT EXISTS Tasks
     title        VARCHAR(100) NOT NULL,
     description  VARCHAR(250),
     is_completed BOOLEAN,
-    project_id   BIGINT       NOT NULL,
 
-    FOREIGN KEY (project_id) REFERENCES Projects (project_id)
+    project_id   BIGINT       NOT NULL,
+    type_id      BIGINT       NOT NULL,
+
+    FOREIGN KEY (project_id) REFERENCES Projects (project_id),
+    FOREIGN KEY (type_id) REFERENCES Task_Type (type_id)
 );
 
 -- #############################
@@ -47,6 +57,19 @@ VALUES (3, 'Completed');
 -- #############################
 
 
+-- #############################
+INSERT INTO Task_Type(type_id, title)
+VALUES (1, 'Task');
+
+INSERT INTO Task_Type(type_id, title)
+VALUES (2, 'Fix');
+
+INSERT INTO Task_Type(type_id, title)
+VALUES (3, 'Bug');
+-- #############################
+
+
+-- #############################
 INSERT INTO projects(project_name, description, status_id)
 VALUES ('Demo project #1', 'Demo description #1', 1);
 
@@ -64,27 +87,29 @@ VALUES ('Sample project #2', 'Sample description #2', 3);
 -- #############################
 
 
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #1', 'Task #1 -> Project #1 Description', FALSE, 1);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #2', 'Task #2 -> Project #1 Description', FALSE, 1);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #3', 'Task #3 -> Project #1 Description', FALSE, 1);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #4', 'Task #4 -> Project #1 Description', FALSE, 1);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #5', 'Task #5 -> Project #1 Description', FALSE, 1);
+-- #############################
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #1', 'Task #1 -> Project #1 Description', FALSE, 1, 1);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #2', 'Task #2 -> Project #1 Description', FALSE, 1, 1);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #3', 'Task #3 -> Project #1 Description', FALSE, 1, 2);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #4', 'Task #4 -> Project #1 Description', FALSE, 1, 3);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #5', 'Task #5 -> Project #1 Description', FALSE, 1, 1);
 
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #1', 'Task #1 -> Project #2 Description', FALSE, 2);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #2', 'Task #2 -> Project #2 Description', FALSE, 2);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #3', 'Task #3 -> Project #2 Description', FALSE, 2);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #1', 'Task #1 -> Project #2 Description', FALSE, 2, 1);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #2', 'Task #2 -> Project #2 Description', FALSE, 2, 1);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #3', 'Task #3 -> Project #2 Description', FALSE, 2, 1);
 
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #1', 'Task #1 -> Project #4 Description', FALSE, 4);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #2', 'Task #2 -> Project #4 Description', FALSE, 4);
-INSERT INTO Tasks(title, description, is_completed, project_id)
-VALUES ('Task #3', 'Task #3 -> Project #4 Description', FALSE, 4);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #1', 'Task #1 -> Project #4 Description', FALSE, 4, 2);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #2', 'Task #2 -> Project #4 Description', FALSE, 4, 1);
+INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
+VALUES ('Task #3', 'Task #3 -> Project #4 Description', FALSE, 4, 3);
+-- #############################
