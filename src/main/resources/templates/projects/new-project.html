@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new project</title>
+</head>
+<body>
+    <nav></nav>
+    <div>
+        <form action="#" method="post" th:action="@{/projects/save}" th:object="${project}">
+            <div>
+                <label for="project-name">
+                    <input id="project-name" placeholder="Project Name" th:field="*{name}" type="text">
+                </label>
+                <span th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
+            </div>
+
+            <div>
+                <label for="project-description">
+                <textarea id="project-description" placeholder="Enter Project Description"
+                          th:field="*{description}"
+                          type="text">
+                </textarea>
+                </label>
+            </div>
+
+            <div>
+                <select id="status-selector" name="" th:field="*{status}">
+                    <option th:each="status : ${projectStatuses}"
+                            th:text="${status.title}"
+                            th:value="${status.id}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit">Create Project</button>
+        </form>
+    </div>
+</body>
+</html>

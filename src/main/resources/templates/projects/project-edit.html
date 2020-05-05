@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Project</title>
+</head>
+<body>
+    <nav></nav>
+
+    <div>
+        <form action="#"
+              method="post"
+              th:action="@{/projects/update/{id}(id = ${project.projectId})}"
+              th:object="${project}">
+            <div>
+                <label for="id">
+                    <input hidden id="id" th:field="*{projectId}" type="text">
+                </label>
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Project Description</th>
+                    <th>Project Status</th>
+                    <th>Project Lead</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        <label for="project-name">
+                            <input id="project-name" placeholder="Project Name" th:field="*{name}" type="text">
+                        </label>
+                        <span th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
+                    </td>
+
+                    <td>
+                        <label for="project-description">
+                            <textarea id="project-description" placeholder="Enter Project Description"
+                                      th:field="*{description}"
+                                      type="text">
+                            </textarea>
+                        </label>
+                    </td>
+
+                    <td>
+                        <select id="status-selector" name="" th:field="*{status}">
+                            <option th:each="status : ${projectStatuses}"
+                                    th:text="${status.title}"
+                                    th:value="${status.id}">
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <button type="submit">Update Project</button>
+            </div>
+
+        </form>
+
+        <div>
+            <button type="submit">
+                <a th:href="@{/projects/delete/{id}(id = ${project.projectId})}">Delete</a>
+            </button>
+        </div>
+    </div>
+</body>
+</html>
