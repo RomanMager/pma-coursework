@@ -2,8 +2,10 @@ package by.bsuir.coursework.pmacoursework.controller;
 
 import by.bsuir.coursework.pmacoursework.entity.Project;
 import by.bsuir.coursework.pmacoursework.entity.Task;
+import by.bsuir.coursework.pmacoursework.entity.TaskType;
 import by.bsuir.coursework.pmacoursework.repository.ProjectRepository;
 import by.bsuir.coursework.pmacoursework.repository.TaskRepository;
+import by.bsuir.coursework.pmacoursework.repository.TaskTypeRepository;
 import by.bsuir.coursework.pmacoursework.service.ProjectService;
 import by.bsuir.coursework.pmacoursework.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,19 @@ public class TaskController {
     private final ProjectRepository projectRepository;
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final TaskTypeRepository taskTypeRepository;
 
     @Autowired
     public TaskController(TaskRepository taskRepository,
                           ProjectRepository projectRepository,
                           ProjectService projectService,
-                          TaskService taskService) {
+                          TaskService taskService,
+                          TaskTypeRepository taskTypeRepository) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
         this.projectService = projectService;
         this.taskService = taskService;
+        this.taskTypeRepository = taskTypeRepository;
     }
 
     @GetMapping(value = {"/projects/{id}/tasks"})
@@ -45,6 +50,7 @@ public class TaskController {
                                            .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + projectId));
 
         List<Task> allTasks = taskRepository.findTasksByProjectProjectId(projectId);
+
         List<Task> availableTasks = allTasks.stream()
                                             .filter(it -> !it.isCompleted())
                                             .collect(Collectors.toList());
@@ -53,10 +59,13 @@ public class TaskController {
                                             .filter(Task::isCompleted)
                                             .collect(Collectors.toList());
 
-        model.addAttribute("task", task);
+        List<TaskType> taskTypes = taskTypeRepository.findAll();
+
         model.addAttribute("project", project);
+        model.addAttribute("task", task);
         model.addAttribute("availableTasks", availableTasks);
         model.addAttribute("completedTasks", completedTasks);
+        model.addAttribute("taskTypes", taskTypes);
 
         return "projects/project-view";
     }
@@ -80,8 +89,10 @@ public class TaskController {
     @GetMapping(value = "/projects/{id}/tasks/{taskId}/edit")
     public String showTaskEditForm(@PathVariable(name = "id") Long projectId, @PathVariable Long taskId, Model model) {
         Task task = taskRepository.findById(taskId).get();
+        List<TaskType> taskTypes = taskTypeRepository.findAll();
 
         model.addAttribute("task", task);
+        model.addAttribute("taskTypes", taskTypes);
         model.addAttribute("project", task.getProject());
         model.addAttribute("projectId", projectId);
 

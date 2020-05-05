@@ -30,6 +30,10 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_id")
+    private TaskType type;
+
     private boolean isCompleted;
 
     @Override

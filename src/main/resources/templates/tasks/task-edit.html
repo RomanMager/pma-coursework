@@ -9,13 +9,20 @@
         <form action="#" method="post"
               th:action="@{/projects/{id}/tasks/update (id = ${projectId})}"
               th:object="${task}">
+            <input th:field="${task.project}" type="hidden">
             <input th:field="${task.id}" th:name="taskId" type="hidden">
 
             <input th:field="${task.title}" type="text">
-            <textarea th:field="${task.description}" type="text">
-            </textarea>
 
-            <input th:field="${task.project}" type="hidden">
+            <textarea th:field="${task.description}" type="text"></textarea>
+
+            <select id="task-type-selector" th:field="*{type}">
+                <option th:each="type : ${taskTypes}"
+                        th:text="${type.title}"
+                        th:value="${type.id}"
+                ></option>
+            </select>
+
             <button type="submit">Update Task</button>
         </form>
 
