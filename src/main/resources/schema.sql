@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Tasks;
 DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Project_Status;
 DROP TABLE IF EXISTS Task_Type;
+DROP TABLE IF EXISTS Employees;
 
 CREATE TABLE IF NOT EXISTS Project_Status
 (
@@ -39,4 +40,15 @@ CREATE TABLE IF NOT EXISTS Tasks
 
     FOREIGN KEY (project_id) REFERENCES Projects (project_id),
     FOREIGN KEY (type_id) REFERENCES Task_Type (type_id)
+);
+
+CREATE TABLE IF NOT EXISTS Employees
+(
+    employee_id BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    login       VARCHAR(100) NOT NULL UNIQUE,
+    email       VARCHAR(30)  NOT NULL,
+    password    VARCHAR(30)  NOT NULL,
+    active      BOOLEAN      NOT NULL,
+    first_name  VARCHAR(50),
+    last_name   VARCHAR(50)
 );
