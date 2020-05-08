@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Tasks;
 DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Project_Status;
 DROP TABLE IF EXISTS Task_Type;
+DROP TABLE IF EXISTS Employees;
 -- #############################
 -- #############################
 
@@ -43,6 +44,16 @@ CREATE TABLE IF NOT EXISTS Tasks
     FOREIGN KEY (type_id) REFERENCES Task_Type (type_id)
 );
 
+CREATE TABLE IF NOT EXISTS Employees
+(
+    employee_id BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    login       VARCHAR(100) NOT NULL UNIQUE,
+    email       VARCHAR(30)  NOT NULL,
+    password    VARCHAR(30)  NOT NULL,
+    active      BOOLEAN      NOT NULL,
+    first_name  VARCHAR(50),
+    last_name   VARCHAR(50)
+);
 -- #############################
 -- #############################
 
@@ -112,4 +123,16 @@ INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
 VALUES ('Task #2', 'Task #2 -> Project #4 Description', FALSE, 4, 1);
 INSERT INTO Tasks(title, description, is_completed, project_id, type_id)
 VALUES ('Task #3', 'Task #3 -> Project #4 Description', FALSE, 4, 3);
+-- #############################
+
+
+-- #############################
+INSERT INTO Employees(login, email, password, active, first_name, last_name)
+VALUES ('j_doe', 'john_doe@ecorp.com', 'john-doe', TRUE, 'John', 'Doe');
+
+INSERT INTO Employees(login, email, password, active, first_name, last_name)
+VALUES ('a_warton', 'alex_warton@gmail.com', 'a-warton', TRUE, 'Alex', 'Warton');
+
+INSERT INTO Employees(login, email, password, active, first_name, last_name)
+VALUES ('r_connor', 'ronald_connor@outlook.com', 'ronald-c', TRUE, 'Ronald', 'Connor');
 -- #############################

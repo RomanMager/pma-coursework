@@ -7,7 +7,10 @@
 <body>
     <nav></nav>
     <div>
-        <form action="#" method="post" th:action="@{/projects/save}" th:object="${project}">
+        <form action="#"
+              method="post"
+              th:action="@{/projects/save}"
+              th:object="${project}">
             <div>
                 <label for="project-name">
                     <input id="project-name" placeholder="Project Name" th:field="*{name}" type="text">

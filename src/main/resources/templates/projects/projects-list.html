@@ -11,13 +11,15 @@
     </style>
 </head>
 <body>
-
     <div>
+
+        <!-- Create new project button -->
         <a th:href="@{/projects/new}">
             Create new project
         </a>
         <hr>
-        <!--<form method="post" th:action="@{/projects/filter}">-->
+
+        <!-- Search Bar -->
         <form method="post" th:action="@{/projects}">
             <label>
                 <input name="filter" type="text">
@@ -25,6 +27,8 @@
             <button type="submit">Search Projects</button>
         </form>
         <hr>
+
+        <!-- Project List -->
         <table>
             <thead>
             <tr>
