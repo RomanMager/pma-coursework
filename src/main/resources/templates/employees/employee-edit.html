@@ -39,6 +39,15 @@
                 <input class="form-check-input" id="is-active-checkbox" th:field="*{active}" type="checkbox">
             </div>
 
+            <div>
+                <select multiple="multiple" th:field="*{roles}">
+                    <option th:each="role : ${availableRoles}"
+                            th:text="${role.name()}"
+                            th:value="${role.getAuthority()}">
+                    </option>
+                </select>
+            </div>
+
             <p>
                 <button type="submit">Submit</button>
                 <button type="reset">Reset</button>

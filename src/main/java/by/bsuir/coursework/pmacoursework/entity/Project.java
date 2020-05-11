@@ -43,8 +43,6 @@ public class Project {
     }
 
     /*
-    private Employee projectLead;
-
     private Set<Employee> employees;
     */
 

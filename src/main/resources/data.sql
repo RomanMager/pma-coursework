@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Project_Status;
 DROP TABLE IF EXISTS Task_Type;
 DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS User_Role;
 -- #############################
 -- #############################
 
@@ -53,6 +54,12 @@ CREATE TABLE IF NOT EXISTS Employees
     active      BOOLEAN      NOT NULL,
     first_name  VARCHAR(50),
     last_name   VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS User_Role
+(
+    employee_id BIGINT NOT NULL,
+    roles       VARCHAR(255)
 );
 -- #############################
 -- #############################
@@ -135,4 +142,11 @@ VALUES ('a_warton', 'alex_warton@gmail.com', 'a-warton', TRUE, 'Alex', 'Warton')
 
 INSERT INTO Employees(login, email, password, active, first_name, last_name)
 VALUES ('r_connor', 'ronald_connor@outlook.com', 'ronald-c', TRUE, 'Ronald', 'Connor');
+-- #############################
+
+
+-- #############################
+INSERT INTO User_Role(employee_id, roles)
+VALUES (1, 'USER'),
+       (1, 'ADMIN');
 -- #############################

@@ -1,8 +1,11 @@
 package by.bsuir.coursework.pmacoursework.controller;
 
 import by.bsuir.coursework.pmacoursework.entity.Employee;
+import by.bsuir.coursework.pmacoursework.entity.Role;
 import by.bsuir.coursework.pmacoursework.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,17 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @RequestMapping(value = "/employee")
+@PreAuthorize(value = "hasAuthority('ADMIN')")
 public class EmployeeController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @GetMapping(value = "/all")
-    public String displayEmployees(Model model) {
+    public String displayEmployees(@AuthenticationPrincipal Employee employee, Model model) {
         List<Employee> employees = employeeRepository.findAll();
 
         model.addAttribute("employees", employees);
@@ -53,7 +58,9 @@ public class EmployeeController {
     @GetMapping(value = "/edit/{id}")
     public String displayEditForm(@PathVariable Long id, Model model) {
         Employee employee = employeeRepository.findById(id).get();
+        List<Role> roles = Arrays.asList(Role.values());
 
+        model.addAttribute("availableRoles", roles);
         model.addAttribute("employee", employee);
 
         return "employees/employee-edit";
@@ -82,5 +89,12 @@ public class EmployeeController {
 
         return "redirect:/employee/all";
     }
+
+    /*
+    ToDo:
+        - Add profile page
+        - Profile edit page (with form)
+        - Add post mapping for profile page form submission
+     */
 }
 
