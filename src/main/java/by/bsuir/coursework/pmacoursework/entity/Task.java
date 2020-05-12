@@ -26,13 +26,19 @@ public class Task {
     @Size(max = 250)
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private TaskType type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "task_employee",
+               joinColumns = @JoinColumn(name = "task_id"),
+               inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    private Employee assignedTo;
 
     private boolean isCompleted;
 

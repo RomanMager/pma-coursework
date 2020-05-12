@@ -19,8 +19,8 @@
                 <label for="employee-login">Login</label>
                 <input id="employee-login" placeholder="Login" th:field="*{login}" type="text">
 
-                <label for="employee-password">Password</label>
-                <input id="employee-password" placeholder="password" th:field="*{password}" type="password">
+                <label for="employee-password" hidden>Password</label>
+                <input hidden id="employee-password" placeholder="password" th:field="*{password}" type="password">
             </div>
 
             <div>
@@ -40,7 +40,8 @@
             </div>
 
             <div>
-                <select multiple="multiple" th:field="*{roles}">
+                <label for="user-roles">Choose user roles:</label>
+                <select id="user-roles" multiple="multiple" th:field="*{roles}">
                     <option th:each="role : ${availableRoles}"
                             th:text="${role.name()}"
                             th:value="${role.getAuthority()}">

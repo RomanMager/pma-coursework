@@ -17,17 +17,17 @@
                 </label>
                 <span th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
             </div>
-
+            <br>
             <div>
-                <label for="project-description">
+                <label for="project-description">Project Description</label>
                 <textarea id="project-description" placeholder="Enter Project Description"
                           th:field="*{description}"
                           type="text">
                 </textarea>
-                </label>
             </div>
-
+            <br>
             <div>
+                <label for="status-selector">Select project status</label>
                 <select id="status-selector" name="" th:field="*{status}">
                     <option th:each="status : ${projectStatuses}"
                             th:text="${status.title}"
@@ -35,6 +35,18 @@
                     </option>
                 </select>
             </div>
+            <br>
+
+            <div>
+                <label for="available-employees">Assign employees to project:</label>
+                <select id="available-employees" multiple="multiple" th:field="*{assignedEmployees}">
+                    <option th:each="employee : ${activeEmployees}"
+                            th:text="${employee.firstName} + ' ' + ${employee.lastName} + '--' + ${employee.login}"
+                            th:value="${employee.id}">
+                    </option>
+                </select>
+            </div>
+            <br>
 
             <button type="submit">Create Project</button>
         </form>

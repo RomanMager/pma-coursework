@@ -56,11 +56,20 @@
                     </textarea>
                 </label>
 
-                <select id="task-type-selector" th:field="*{type}">
+                <label for="task-type">Choose task type</label>
+                <select id="task-type" th:field="*{type}">
                     <option th:each="type : ${taskTypes}"
                             th:text="${type.title}"
-                            th:value="${type.id}"
-                    ></option>
+                            th:value="${type.id}">
+                    </option>
+                </select>
+
+                <label for="assign-to">Assign to</label>
+                <select id="assign-to" th:field="${task.assignedTo}">
+                    <option th:each="employee : ${currentProjectEmployees}"
+                            th:text="${employee.firstName} + ' ' + ${employee.lastName} ?: 'UNKNOWN'"
+                            th:value="${employee.id}">
+                    </option>
                 </select>
 
                 <button type="submit">Add Task</button>

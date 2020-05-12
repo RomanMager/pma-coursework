@@ -19,8 +19,16 @@
             <select id="task-type-selector" th:field="*{type}">
                 <option th:each="type : ${taskTypes}"
                         th:text="${type.title}"
-                        th:value="${type.id}"
-                ></option>
+                        th:value="${type.id}">
+                </option>
+            </select>
+
+            <label for="assign-to">Assign to</label>
+            <select id="assign-to" th:field="${task.assignedTo}">
+                <option th:each="employee : ${currentProjectEmployees}"
+                        th:text="${employee.firstName} + ' ' + ${employee.lastName}"
+                        th:value="${employee.id}">
+                </option>
             </select>
 
             <button type="submit">Update Task</button>
@@ -28,8 +36,7 @@
 
         <form action="#" method="post"
               th:action="@{/projects/{id}/tasks/delete (id = ${projectId})}"
-              th:object="${task}"
-        >
+              th:object="${task}">
             <!--<input th:field="${task.id}" th:name="taskId" type="hidden">-->
             <button th:name="taskId" th:value="${task.id}" type="submit">Delete</button>
         </form>

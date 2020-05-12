@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Home Page</title>
+</head>
+<body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+
+        <div id="my-projects">
+            <div class="row">
+                <div class="col-6">
+                    <h1>My Projects</h1>
+                    <div th:each="project : ${assignedProjects}">
+                        <a th:href="@{/projects/{id}/tasks (id = ${project.projectId})}">
+                            <h4 th:text="${project.name}" th:value="${project.name}"></h4>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <h1>My Tasks</h1>
+                    <div th:each="task : ${assignedTasks}">
+                        <p th:text="${task.title} + ' in project: ' + ${task.project.name}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:remove="tag" th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

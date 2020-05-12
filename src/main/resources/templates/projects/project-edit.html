@@ -24,6 +24,7 @@
                     <th>Project Name</th>
                     <th>Project Description</th>
                     <th>Project Status</th>
+                    <th>Employees</th>
                     <th>Project Lead</th>
                 </tr>
                 </thead>
@@ -51,6 +52,15 @@
                             <option th:each="status : ${projectStatuses}"
                                     th:text="${status.title}"
                                     th:value="${status.id}">
+                            </option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select id="employees" multiple="multiple" th:field="*{assignedEmployees}">
+                            <option th:each="employee : ${activeEmployees}"
+                                    th:text="${employee.firstName} + ' ' + ${employee.lastName} + '--' + ${employee.login}"
+                                    th:value="${employee.id}">
                             </option>
                         </select>
                     </td>

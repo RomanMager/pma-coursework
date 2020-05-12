@@ -10,26 +10,27 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
-
+// @Profile("local")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
+    private final EmployeeService employeeService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private EmployeeService employeeService;
+    public WebSecurityConfig(EmployeeService employeeService, PasswordEncoder passwordEncoder) {
+        this.employeeService = employeeService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Profile("dev")
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(employeeService)
-            .passwordEncoder(NoOpPasswordEncoder.getInstance());
+            .passwordEncoder(passwordEncoder);
     }
 
     @Profile("dev")
@@ -42,9 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/registration").permitAll()
-            .antMatchers("/h2-console/**").permitAll()
-            .antMatchers("/console/**").permitAll()
+            .antMatchers("/registration").permitAll()
             .antMatchers("/employee/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
             .and()
@@ -54,7 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout()
             .permitAll()
-            .logoutSuccessUrl("/")
             .and()
             .rememberMe();
     }

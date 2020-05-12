@@ -1,5 +1,6 @@
 package by.bsuir.coursework.pmacoursework.repository;
 
+import by.bsuir.coursework.pmacoursework.entity.Employee;
 import by.bsuir.coursework.pmacoursework.entity.Project;
 import by.bsuir.coursework.pmacoursework.entity.Task;
 import org.springframework.data.repository.CrudRepository;
@@ -15,4 +16,6 @@ public interface TaskRepository extends CrudRepository<Task, Long> {
     List<Task> findAllByProjectProjectId(Long projectId);
 
     List<Task> findTasksByProjectProjectId(Long id);
+
+    List<Task> findAllByAssignedToEquals(Employee employee);
 }

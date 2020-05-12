@@ -24,8 +24,12 @@ import java.util.List;
 @PreAuthorize(value = "hasAuthority('ADMIN')")
 public class EmployeeController {
 
+    private final EmployeeRepository employeeRepository;
+
     @Autowired
-    private EmployeeRepository employeeRepository;
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     @GetMapping(value = "/all")
     public String displayEmployees(@AuthenticationPrincipal Employee employee, Model model) {
@@ -67,7 +71,7 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/update/{id}")
-    public String updateEmployee(@PathVariable @NotNull Long id, @Valid Employee updatedEmployee,
+    public String updateEmployee(@PathVariable @NotNull Long id, Employee updatedEmployee,
                                  BindingResult result, Model model) {
         if (result.hasErrors()) {
             updatedEmployee.setId(id);
@@ -89,12 +93,5 @@ public class EmployeeController {
 
         return "redirect:/employee/all";
     }
-
-    /*
-    ToDo:
-        - Add profile page
-        - Profile edit page (with form)
-        - Add post mapping for profile page form submission
-     */
 }
 

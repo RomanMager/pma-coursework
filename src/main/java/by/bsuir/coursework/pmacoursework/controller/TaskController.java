@@ -1,5 +1,6 @@
 package by.bsuir.coursework.pmacoursework.controller;
 
+import by.bsuir.coursework.pmacoursework.entity.Employee;
 import by.bsuir.coursework.pmacoursework.entity.Project;
 import by.bsuir.coursework.pmacoursework.entity.Task;
 import by.bsuir.coursework.pmacoursework.entity.TaskType;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,7 +45,7 @@ public class TaskController {
         this.taskTypeRepository = taskTypeRepository;
     }
 
-    @GetMapping(value = {"/projects/{id}/tasks"})
+    @GetMapping(value = "/projects/{id}/tasks")
     public String getAllTasks(@PathVariable(name = "id") Long projectId, Model model) {
         Task task = new Task();
         Project project = projectRepository.findById(projectId)
@@ -61,11 +63,14 @@ public class TaskController {
 
         List<TaskType> taskTypes = taskTypeRepository.findAll();
 
+        Set<Employee> currentProjectEmployees = project.getAssignedEmployees();
+
         model.addAttribute("project", project);
         model.addAttribute("task", task);
         model.addAttribute("availableTasks", availableTasks);
         model.addAttribute("completedTasks", completedTasks);
         model.addAttribute("taskTypes", taskTypes);
+        model.addAttribute("currentProjectEmployees", currentProjectEmployees);
 
         return "projects/project-view";
     }
@@ -91,10 +96,14 @@ public class TaskController {
         Task task = taskRepository.findById(taskId).get();
         List<TaskType> taskTypes = taskTypeRepository.findAll();
 
+        Project project = projectRepository.findById(projectId).get();
+        Set<Employee> currentProjectEmployees = project.getAssignedEmployees();
+
         model.addAttribute("task", task);
         model.addAttribute("taskTypes", taskTypes);
         model.addAttribute("project", task.getProject());
         model.addAttribute("projectId", projectId);
+        model.addAttribute("currentProjectEmployees", currentProjectEmployees);
 
         return "tasks/task-edit";
     }

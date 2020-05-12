@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Update Profile</title>
+</head>
+
+<body>
+    <div>
+        <!--<form th:action="@{/profile/{employee}/update (employee = ${principal})}"></form>-->
+        <form th:action="@{/profile/{employee}/update}"></form>
+    </div>
+</body>
+</html>
