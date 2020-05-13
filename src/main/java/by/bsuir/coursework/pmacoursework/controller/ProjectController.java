@@ -8,6 +8,7 @@ import by.bsuir.coursework.pmacoursework.repository.ProjectRepository;
 import by.bsuir.coursework.pmacoursework.repository.ProjectStatusRepository;
 import by.bsuir.coursework.pmacoursework.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,6 +62,7 @@ public class ProjectController {
         return "projects/projects-list";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/new")
     public String displayNewProjectForm(Model model) {
         Project newProject = new Project();
@@ -75,6 +77,7 @@ public class ProjectController {
         return "projects/new-project";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PostMapping(value = "/save")
     public String createProject(@Valid Project project, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -91,16 +94,7 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // @GetMapping(value = "/{id}")
-    // public String viewProject(@PathVariable Long id, Model model) {
-    //     Project project = projectRepository.findById(id)
-    //                                        .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
-    //
-    //     model.addAttribute("project", project);
-    //
-    //     return "projects/project-view";
-    // }
-
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/edit/{id}")
     public String displayProjectEditForm(@PathVariable Long id, Model model) {
         Project project = projectRepository.findById(id)
@@ -116,6 +110,7 @@ public class ProjectController {
         return "projects/project-edit";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PostMapping(value = "/update/{id}")
     public String updateProject(@PathVariable @NotNull Long id, @Valid Project project,
                                 BindingResult result, Model model) {
@@ -129,6 +124,7 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/delete/{id}")
     public String deleteProject(@PathVariable Long id, Model model) {
         Project project = projectRepository.findById(id)

@@ -19,10 +19,6 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    // public Optional<List<Project>> findProjectByName(String projectName) {
-    //     return projectRepository.findByName(projectName);
-    // }
-
     public List<Project> findProjectByName(String projectName) {
         return projectRepository.findByName(projectName);
     }

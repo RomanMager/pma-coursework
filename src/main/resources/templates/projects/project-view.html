@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
 
 <head th:replace="~{fragments/head :: headFragment}">
     <title id="pageTitle">Project View</title>
@@ -55,13 +57,15 @@
                     </option>
                 </select>
 
-                <label for="assign-to">Assign to</label>
-                <select id="assign-to" th:field="${task.assignedTo}">
-                    <option th:each="employee : ${currentProjectEmployees}"
-                            th:text="(${employee.firstName != null} ? ${employee.firstName} : '') + ' ' + (${employee.lastName != null} ? ${employee.lastName} : '')"
-                            th:value="${employee.id}">
-                    </option>
-                </select>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <label for="assign-to">Assign to</label>
+                    <select id="assign-to" th:field="${task.assignedTo}">
+                        <option th:each="employee : ${currentProjectEmployees}"
+                                th:text="(${employee.firstName != null} ? ${employee.firstName} : '') + ' ' + (${employee.lastName != null} ? ${employee.lastName} : '')"
+                                th:value="${employee.id}">
+                        </option>
+                    </select>
+                </div>
 
                 <button class="btn btn-primary" type="submit">Add Task</button>
             </form>

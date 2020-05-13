@@ -56,10 +56,9 @@ public class EmployeeService implements UserDetailsService {
             original.setPassword(passwordEncoder.encode(updatedData.getPassword()));
         }
 
-        /*
-        ToDo:
-            - Update email
-         */
+        if (!original.getEmail().equals(updatedData.getEmail())) {
+            original.setEmail(updatedData.getEmail());
+        }
 
         employeeRepository.save(original);
     }

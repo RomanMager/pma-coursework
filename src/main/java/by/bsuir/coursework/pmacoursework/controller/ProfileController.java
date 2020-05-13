@@ -16,18 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/profile")
 public class ProfileController {
 
-    /*
-    ToDo:
-        - Add profile page
-        - Profile edit page (with form)
-        - Add post mapping for profile page form submission
-     */
+    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private EmployeeService employeeService;
+    public ProfileController(EmployeeRepository employeeRepository,
+                             EmployeeService employeeService) {
+        this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
+    }
 
     @GetMapping
     public String displayProfile(@AuthenticationPrincipal Employee employee, Model model) {

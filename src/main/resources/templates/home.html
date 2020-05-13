@@ -15,18 +15,28 @@
             <div class="row">
                 <div class="col-6">
                     <h1>My Projects</h1>
+                    <hr>
                     <div th:each="project : ${assignedProjects}">
                         <a th:href="@{/projects/{id}/tasks (id = ${project.projectId})}">
                             <h4 th:text="${project.name}" th:value="${project.name}"></h4>
                         </a>
+                        <hr>
                     </div>
                 </div>
 
                 <div class="col-6">
                     <h1>My Tasks</h1>
-                    <div th:each="task : ${assignedTasks}">
-                        <p th:text="${task.title} + ' in project: ' + ${task.project.name}"></p>
-                    </div>
+                    <hr>
+                    <ul class="fa-ul" th:each="task : ${assignedTasks}">
+                        <li>
+                            <span class="fa-li"><i class="far fa-square"></i></span>
+                            <span th:text="${task.title}"></span>
+                            <a th:href="@{/projects/{id}/tasks (id = ${task.project.projectId})}">
+                                <span class="badge badge-pill badge-primary" th:text="${task.project.name}"></span>
+                            </a>
+                            <hr>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

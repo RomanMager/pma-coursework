@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
 
 <head th:replace="~{fragments/head :: headFragment}">
     <title id="pageTitle">Projects List</title>
@@ -11,9 +14,11 @@
 
     <div class="container">
         <!-- Create new project button -->
-        <a class="btn btn-success" th:href="@{/projects/new}">
-            Create new project
-        </a>
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a class="btn btn-success" th:href="@{/projects/new}">
+                Create new project
+            </a>
+        </div>
         <br>
         <br>
 
