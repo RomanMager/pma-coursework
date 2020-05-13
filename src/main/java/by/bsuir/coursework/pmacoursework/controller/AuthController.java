@@ -39,7 +39,7 @@ public class AuthController {
                                BindingResult bindingResult,
                                Model model) {
         if (bindingResult.hasErrors() || bindingResult.hasFieldErrors()) {
-            return "registration";
+            return "security/registration";
         }
 
         Employee employeeFromDB = employeeRepository.findByLoginOrEmail(employee.getLogin(), employee.getEmail());

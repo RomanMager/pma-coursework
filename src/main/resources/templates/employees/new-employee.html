@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Employee</title>
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Create project</title>
 </head>
+
 <body>
-    <div>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
         <!-- User edit form -->
-        <form class=""
-              method="post"
+        <form method="post"
               th:action="@{/employee/save}"
               th:object="${employee}">
-            <div>
+            <div class="form-group">
                 <label for="employee-email">Email</label>
-                <input id="employee-email" placeholder="Email" th:field="*{email}" type="email">
-
+                <input class="form-control" id="employee-email" placeholder="Email" th:field="*{email}" type="email">
+            </div>
+            <div class="form-group">
                 <label for="employee-login">Login</label>
-                <input id="employee-login" placeholder="Login" th:field="*{login}" type="text">
-
+                <input class="form-control" id="employee-login" placeholder="Login" th:field="*{login}" type="text">
+            </div>
+            <div class="form-group">
                 <label for="employee-password">Password</label>
-                <input id="employee-password" placeholder="password" th:field="*{password}" type="password">
+                <input class="form-control" id="employee-password" placeholder="password" th:field="*{password}"
+                       type="password">
             </div>
 
-            <div>
+            <div class="form-group">
                 <label for="employee-first-name">First Name:</label>
-                <input id="employee-first-name" placeholder="John" th:field="*{firstName}" type="text">
-
-                <label for="employee-last-name">Last Name:</label>
-                <input id="employee-last-name" placeholder="Doe" th:field="*{lastName}" type="text">
+                <input class="form-control" id="employee-first-name" placeholder="John" th:field="*{firstName}"
+                       type="text">
             </div>
-
+            <div class="form-group">
+                <label for="employee-last-name">Last Name:</label>
+                <input class="form-control" id="employee-last-name" placeholder="Doe" th:field="*{lastName}"
+                       type="text">
+            </div>
             <p>
-                <button type="submit">Create new user</button>
+                <button class="btn btn-success" type="submit">Create new user</button>
             </p>
         </form>
     </div>

@@ -38,4 +38,29 @@ public class EmployeeService implements UserDetailsService {
 
         return employee;
     }
+
+    public void updateProfile(Employee original, Employee updatedData) {
+        if (!original.getFirstName().equals(updatedData.getFirstName())) {
+            original.setFirstName(updatedData.getFirstName());
+        }
+
+        if (!original.getLastName().equals(updatedData.getLastName())) {
+            original.setLastName(updatedData.getLastName());
+        }
+
+        if (!original.getLogin().equals(updatedData.getLogin())) {
+            original.setLogin(updatedData.getLogin());
+        }
+
+        if (!updatedData.getPassword().isEmpty() && !original.getPassword().equals(updatedData.getPassword())) {
+            original.setPassword(passwordEncoder.encode(updatedData.getPassword()));
+        }
+
+        /*
+        ToDo:
+            - Update email
+         */
+
+        employeeRepository.save(original);
+    }
 }

@@ -54,7 +54,6 @@ public class Employee implements UserDetails {
 
     @OneToMany(mappedBy = "assignedTo",
                cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
-               orphanRemoval = true,
                fetch = FetchType.LAZY)
     private Set<Task> assignedTasks;
 
@@ -111,4 +110,19 @@ public class Employee implements UserDetails {
         return id.equals(employee.id);
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", active=" + active +
+                ", roles=" + roles +
+                ", assignedProjects=" + assignedProjects +
+                ", assignedTasks=" + assignedTasks +
+                '}';
+    }
 }

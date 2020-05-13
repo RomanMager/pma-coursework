@@ -70,7 +70,11 @@ public class TaskController {
         model.addAttribute("availableTasks", availableTasks);
         model.addAttribute("completedTasks", completedTasks);
         model.addAttribute("taskTypes", taskTypes);
-        model.addAttribute("currentProjectEmployees", currentProjectEmployees);
+        if (currentProjectEmployees.isEmpty()) {
+            model.addAttribute("currentProjectEmployees", new Employee());
+        } else {
+            model.addAttribute("currentProjectEmployees", currentProjectEmployees);
+        }
 
         return "projects/project-view";
     }

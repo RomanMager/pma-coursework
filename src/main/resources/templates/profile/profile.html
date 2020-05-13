@@ -4,17 +4,25 @@
 <head th:replace="~{fragments/head :: headFragment}">
     <title id="pageTitle">Profile</title>
 </head>
-<body>
-    <div>
-        <p th:text="${employee.firstName}"></p>
-        <p th:text="${employee.lastName}"></p>
-        <p th:text="${employee.email}"></p>
-        <p th:text="${employee.login}"></p>
 
-        <button>
-            <a th:href="@{/profile/edit}">Edit profile</a>
-            <!--<a th:href="@{/profile/{id}/edit (id=${employee.id})}">Edit profile</a>-->
-        </button>
+<body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <div>
+                <h3 th:text="${employee.firstName}"></h3>
+                <h3 th:text="${employee.lastName}"></h3>
+            </div>
+            <h4 th:text="${employee.email}"></h4>
+            <h4 th:text="${employee.login}"></h4>
+
+            <button class="btn btn-info">
+                <a th:href="@{/profile/edit}">Edit profile</a>
+            </button>
+        </div>
     </div>
 </body>
 </html>

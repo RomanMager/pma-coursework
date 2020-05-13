@@ -1,6 +1,9 @@
 package by.bsuir.coursework.pmacoursework.controller;
 
 import by.bsuir.coursework.pmacoursework.entity.Employee;
+import by.bsuir.coursework.pmacoursework.repository.EmployeeRepository;
+import by.bsuir.coursework.pmacoursework.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +23,18 @@ public class ProfileController {
         - Add post mapping for profile page form submission
      */
 
-    // @GetMapping(value = "/{employee}")
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeService employeeService;
+
     @GetMapping
     public String displayProfile(@AuthenticationPrincipal Employee employee, Model model) {
         model.addAttribute("employee", employee);
         return "profile/profile";
     }
 
-    // @GetMapping(value = "/{id}/edit")
     @GetMapping(value = "/edit")
     public String displayEditForm(@AuthenticationPrincipal Employee employee, Model model) {
         model.addAttribute("employee", employee);
@@ -35,9 +42,16 @@ public class ProfileController {
     }
 
     @PostMapping(value = "/update")
-    public String updateProfile(@AuthenticationPrincipal Employee employee,
+    public String updateProfile(@AuthenticationPrincipal Employee principal,
+                                Employee updated,
                                 BindingResult bindingResult,
                                 Model model) {
+        if (bindingResult.hasErrors() || bindingResult.hasFieldErrors()) {
+            return "profile/profile-edit";
+        }
+
+        employeeService.updateProfile(principal, updated);
+
         return "redirect:/profile";
     }
 

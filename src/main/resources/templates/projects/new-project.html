@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Create new project</title>
+
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Create project</title>
 </head>
+
 <body>
-    <nav></nav>
-    <div>
-        <form action="#"
-              method="post"
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
+        <form method="post"
               th:action="@{/projects/save}"
               th:object="${project}">
-            <div>
-                <label for="project-name">
-                    <input id="project-name" placeholder="Project Name" th:field="*{name}" type="text">
-                </label>
+            <div class="form-group">
+                <label for="project-name">Project Name:</label>
+                <input class="form-control" id="project-name" placeholder="Project Name" th:field="*{name}" type="text">
                 <span th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
             </div>
             <br>
-            <div>
+
+            <div class="form-group">
                 <label for="project-description">Project Description</label>
-                <textarea id="project-description" placeholder="Enter Project Description"
+                <textarea class="form-control" id="project-description" placeholder="Enter Project Description"
                           th:field="*{description}"
                           type="text">
                 </textarea>
             </div>
             <br>
-            <div>
+
+            <div class="form-group">
                 <label for="status-selector">Select project status</label>
-                <select id="status-selector" name="" th:field="*{status}">
+                <select class="form-control" id="status-selector" name="" th:field="*{status}">
                     <option th:each="status : ${projectStatuses}"
                             th:text="${status.title}"
                             th:value="${status.id}">
@@ -37,18 +41,18 @@
             </div>
             <br>
 
-            <div>
+            <div class="form-group">
                 <label for="available-employees">Assign employees to project:</label>
-                <select id="available-employees" multiple="multiple" th:field="*{assignedEmployees}">
+                <select class="form-control" id="available-employees" multiple="multiple" th:field="*{assignedEmployees}">
                     <option th:each="employee : ${activeEmployees}"
-                            th:text="${employee.firstName} + ' ' + ${employee.lastName} + '--' + ${employee.login}"
+                            th:text="${employee.firstName} + ' ' + ${employee.lastName} + ' – ' + ${employee.login}"
                             th:value="${employee.id}">
                     </option>
                 </select>
             </div>
             <br>
 
-            <button type="submit">Create Project</button>
+            <button class="btn btn-success" type="submit">Create Project</button>
         </form>
     </div>
 </body>

@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>All Employees</title>
 
-    <style>
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Employee List</title>
 </head>
+
 <body>
-    <div>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
         <!-- Create new employee -->
-        <a th:href="@{/employee/new}">
+        <a class="btn btn-success" th:href="@{/employee/new}">
             Create new employee
         </a>
-        <hr>
+        <br>
+        <br>
+
         <!-- Employees List -->
-        <table>
+        <table class="table table-striped">
             <thead>
             <tr>
                 <td>Employee ID</td>
@@ -39,9 +40,7 @@
                 <td th:text="${employee.lastName}"></td>
                 <td th:text="${employee.active} ? 'Active' : 'Deactivated'"></td>
                 <td>
-                    <button>
-                        <a th:href="@{/employee/edit/{id}(id = ${employee.id})}">Edit</a>
-                    </button>
+                    <a class="btn btn-warning" th:href="@{/employee/edit/{id}(id = ${employee.id})}">Edit</a>
                 </td>
             </tr>
             </tbody>
