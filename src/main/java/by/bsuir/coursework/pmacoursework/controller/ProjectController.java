@@ -1,11 +1,14 @@
 package by.bsuir.coursework.pmacoursework.controller;
 
+import by.bsuir.coursework.pmacoursework.entity.Employee;
 import by.bsuir.coursework.pmacoursework.entity.Project;
 import by.bsuir.coursework.pmacoursework.entity.ProjectStatus;
+import by.bsuir.coursework.pmacoursework.repository.EmployeeRepository;
 import by.bsuir.coursework.pmacoursework.repository.ProjectRepository;
 import by.bsuir.coursework.pmacoursework.repository.ProjectStatusRepository;
 import by.bsuir.coursework.pmacoursework.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,14 +25,17 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
     private final ProjectStatusRepository statusRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public ProjectController(ProjectService projectService,
                              ProjectRepository projectRepository,
-                             ProjectStatusRepository statusRepository) {
+                             ProjectStatusRepository statusRepository,
+                             EmployeeRepository employeeRepository) {
         this.projectService = projectService;
         this.projectRepository = projectRepository;
         this.statusRepository = statusRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @GetMapping
@@ -41,7 +47,6 @@ public class ProjectController {
         return "projects/projects-list";
     }
 
-    // @PostMapping(value = "/filter")
     @PostMapping
     public String filterProject(Model model, @RequestParam String filter) {
         List<Project> projects;
@@ -57,23 +62,31 @@ public class ProjectController {
         return "projects/projects-list";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/new")
     public String displayNewProjectForm(Model model) {
         Project newProject = new Project();
-        // todo: Add employees to the project
-        //  - ? show only employees which are ruled by a specific manager.
 
+        List<Employee> activeEmployees = employeeRepository.findEmployeesByActiveIsTrue();
         List<ProjectStatus> projectStatuses = statusRepository.findAll();
 
+        model.addAttribute("activeEmployees", activeEmployees);
         model.addAttribute("project", newProject);
         model.addAttribute("projectStatuses", projectStatuses);
 
         return "projects/new-project";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PostMapping(value = "/save")
     public String createProject(@Valid Project project, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<Employee> activeEmployees = employeeRepository.findEmployeesByActiveIsTrue();
+            List<ProjectStatus> projectStatuses = statusRepository.findAll();
+
+            model.addAttribute("activeEmployees", activeEmployees);
+            model.addAttribute("projectStatuses", projectStatuses);
+
             return "projects/new-project";
         }
         projectService.save(project);
@@ -81,28 +94,23 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
-    // @GetMapping(value = "/{id}")
-    // public String viewProject(@PathVariable Long id, Model model) {
-    //     Project project = projectRepository.findById(id)
-    //                                        .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
-    //
-    //     model.addAttribute("project", project);
-    //
-    //     return "projects/project-view";
-    // }
-
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/edit/{id}")
     public String displayProjectEditForm(@PathVariable Long id, Model model) {
         Project project = projectRepository.findById(id)
                                            .orElseThrow(() -> new IllegalArgumentException("Invalid Project ID:" + id));
         List<ProjectStatus> projectStatuses = statusRepository.findAll();
+        List<Employee> activeEmployees = employeeRepository.findEmployeesByActiveIsTrue();
+
 
         model.addAttribute("project", project);
         model.addAttribute("projectStatuses", projectStatuses);
+        model.addAttribute("activeEmployees", activeEmployees);
 
         return "projects/project-edit";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @PostMapping(value = "/update/{id}")
     public String updateProject(@PathVariable @NotNull Long id, @Valid Project project,
                                 BindingResult result, Model model) {
@@ -116,6 +124,7 @@ public class ProjectController {
         return "redirect:/projects";
     }
 
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/delete/{id}")
     public String deleteProject(@PathVariable Long id, Model model) {
         Project project = projectRepository.findById(id)

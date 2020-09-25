@@ -1,69 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
 
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Project View</title>
+</head>
+
+<body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container-fluid">
         <!-- Project info -->
         <div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Project ID</th>
-                    <th>Project Name</th>
-                    <th>Project Description</th>
-                    <th>Project Lead</th>
-                </tr>
-                </thead>
+            <h2 th:text="${project.name}"></h2>
 
-                <tbody>
-                <tr>
-                    <td th:text="${project.projectId}"></td>
-                    <td th:text="${project.name}"></td>
-                    <td th:text="${project.description}"></td>
-                    <td>XXX</td>
-                </tr>
-                </tbody>
-            </table>
+            <h5>Description:</h5>
+            <p th:text="${project.description}"></p>
 
-            <button><a th:href="@{/projects/edit/{id}(id = ${project.projectId})}">Edit</a></button>
+            <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-warning">
+                <a th:href="@{/projects/edit/{id} (id = ${project.projectId})}">Edit</a>
+            </button>
 
-            <button type="submit">
-                <!--<a th:href="@{/projects/}"></a>-->
-                <a href="/projects"> Go to the projects view</a>
+            <button class="btn btn-info" type="submit">
+                <a th:href="@{/projects}"> Go to the projects view</a>
             </button>
         </div>
-
         <hr>
 
         <!-- Add a new task -->
         <div>
-            <form action="#" method="post"
+            <h4>Add a new task</h4>
+            <form class="form-inline"
+                  method="post"
                   th:action="@{/projects/{id}/tasks/new (id = ${project.projectId})}"
                   th:object="${task}">
                 <input th:field="*{id}" type="hidden">
 
                 <label for="task-title">
-                    <input id="task-title" placeholder="Buy milk..." th:field="*{title}" type="text">
+                    <input class="form-control" id="task-title" placeholder="Fix a bug..." th:field="*{title}" type="text">
                 </label>
 
                 <label for="task-description">
-                    <textarea id="task-description" placeholder="Task Description"
+                    <textarea class="form-control" id="task-description" placeholder="Task Description"
                               th:field="*{description}" type="text">
                     </textarea>
                 </label>
 
-                <select id="task-type-selector" th:field="*{type}">
+                <label for="task-type">Choose task type</label>
+                <select class="custom-select my-1 mr-sm-2" id="task-type" th:field="*{type}">
                     <option th:each="type : ${taskTypes}"
                             th:text="${type.title}"
-                            th:value="${type.id}"
-                    ></option>
+                            th:value="${type.id}">
+                    </option>
                 </select>
 
-                <button type="submit">Add Task</button>
+                <div sec:authorize="hasAuthority('ADMIN')">
+                    <label for="assign-to">Assign to</label>
+                    <select id="assign-to" th:field="${task.assignedTo}">
+                        <option th:each="employee : ${currentProjectEmployees}"
+                                th:text="(${employee.firstName != null} ? ${employee.firstName} : '') + ' ' + (${employee.lastName != null} ? ${employee.lastName} : '')"
+                                th:value="${employee.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Add Task</button>
             </form>
         </div>
 
@@ -71,40 +75,37 @@
 
         <!-- Tasks List -->
         <div>
-            <table>
+            <!--<table style="align-content: center" class="table">-->
+            <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Task ID</th>
                     <th>Task Name</th>
                     <th>Task Type</th>
                     <th>Task Description</th>
+                    <th>Assigned to</th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr th:each="task : ${availableTasks}" th:object="${availableTasks}">
-                    <td th:text="${task.id}"></td>
                     <td th:text="${task.title}"></td>
                     <td th:text="${task.type.title}"></td>
                     <td th:text="${task.description}"></td>
+                    <td th:text="${task?.assignedTo?.firstName} ?: 'Unassigned'"></td>
                     <td>
-                        <button>
+                        <button class="btn btn-warning">
                             <a th:href="@{/projects/{id}/tasks/{taskId}/edit (id = ${project.projectId}, taskId=${task.id})}">
                                 Edit
                             </a>
                         </button>
                     </td>
                     <td>
-                        <!--<button>-->
-                        <!--    <a th:href="@{/projects/{id}/tasks/{taskId}/status (id = ${project.projectId}, taskId=${task.id})}"-->
-                        <!--       th:name="status" th:value="complete">-->
-                        <!--        Complete-->
-                        <!--    </a>-->
-                        <!--</button>-->
                         <form action="#" method="post"
                               th:action="@{/projects/{id}/tasks/{taskId}/status (id = ${project.projectId}, taskId=${task.id})}"
                               th:object="${task}">
-                            <button th:name="status" th:value="complete" type="submit">
+                            <button class="btn btn-warning" th:name="status" th:value="complete" type="submit">
                                 Complete
                             </button>
                         </form>
@@ -114,10 +115,10 @@
             </table>
 
             <hr>
-            <hr>
+            <br>
 
+            <h3>Completed tasks</h3>
             <table>
-                <h3>Completed tasks</h3>
                 <tbody>
                 <tr th:each="completedTask : ${completedTasks}">
                     <td>

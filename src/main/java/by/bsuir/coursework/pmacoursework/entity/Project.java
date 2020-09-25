@@ -28,25 +28,28 @@ public class Project {
     @Size(max = 400)
     private String description;
 
-    // @OneToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "status_id", referencedColumnName = "status_id")
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "status_id")
     private ProjectStatus status;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project",
+               cascade = CascadeType.ALL,
+               fetch = FetchType.LAZY)
     private Set<Task> tasks;
 
-    public Project(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    // @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
+    //             fetch = FetchType.LAZY)
+    // @JoinTable(name = "Project_ProjectLead",
+    //            joinColumns = @JoinColumn(name = "project_id"),
+    //            inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    // private Employee projectLead;
 
-    /*
-    private Employee projectLead;
-
-    private Set<Employee> employees;
-    */
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
+                fetch = FetchType.LAZY)
+    @JoinTable(name = "project_employee",
+               joinColumns = @JoinColumn(name = "project_id"),
+               inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    private Set<Employee> assignedEmployees;
 
     @Override
     public int hashCode() {

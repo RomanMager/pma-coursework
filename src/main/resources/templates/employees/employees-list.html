@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Employee List</title>
+</head>
+
+<body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
+        <!-- Create new employee -->
+        <a class="btn btn-success" th:href="@{/employee/new}">
+            Create new employee
+        </a>
+        <br>
+        <br>
+
+        <!-- Employees List -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>Employee ID</td>
+                <td>Employee Login</td>
+                <td>Employee Email</td>
+                <td>Employee First name</td>
+                <td>Employee Last name</td>
+                <td>Employee Status</td>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.login}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.firstName}"></td>
+                <td th:text="${employee.lastName}"></td>
+                <td th:text="${employee.active} ? 'Active' : 'Deactivated'"></td>
+                <td>
+                    <a class="btn btn-warning" th:href="@{/employee/edit/{id}(id = ${employee.id})}">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

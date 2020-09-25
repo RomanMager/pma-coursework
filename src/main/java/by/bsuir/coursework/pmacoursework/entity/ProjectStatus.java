@@ -19,9 +19,6 @@ public class ProjectStatus {
 
     private String title;
 
-    // @OneToOne(mappedBy = "status")
-    // private Project project;
-
     @Override
     public int hashCode() {
         return Objects.hash(id);

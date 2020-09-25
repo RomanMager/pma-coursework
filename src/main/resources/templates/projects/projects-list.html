@@ -1,55 +1,74 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>All Projects</title>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="https://www.thymeleaf.org">
 
-    <style>
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Projects List</title>
 </head>
 <body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
 
-    <div>
-        <a th:href="@{/projects/new}">
-            Create new project
-        </a>
-        <hr>
-        <!--<form method="post" th:action="@{/projects/filter}">-->
+    <div class="container">
+        <!-- Create new project button -->
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a class="btn btn-success" th:href="@{/projects/new}">
+                Create new project
+            </a>
+        </div>
+        <br>
+        <br>
+
+        <!-- Search Bar -->
         <form method="post" th:action="@{/projects}">
-            <label>
-                <input name="filter" type="text">
-            </label>
-            <button type="submit">Search Projects</button>
+            <div class="input-group">
+                <label>
+                    <input class="form-control" name="filter" placeholder="Project Name" type="text">
+                </label>
+                <button class="btn btn-info btn-sm" type="submit">Search Projects</button>
+            </div>
         </form>
-        <hr>
-        <table>
-            <thead>
-            <tr>
-                <th>Project ID</th>
-                <th>Project Name</th>
-                <th>Project Status</th>
-                <th>Project Lead</th>
-            </tr>
-            </thead>
+        <br>
+        <br>
+        <br>
 
-            <tbody>
-            <tr th:each="project : ${projects}">
-                <td th:text="${project.projectId}"></td>
-                <td>
-                    <!--<a th:href="@{/projects/{id}(id = ${project.projectId})}" th:text="${project.name}"></a>-->
-                    <a th:href="@{/projects/{id}/tasks (id = ${project.projectId})}" th:text="${project.name}"></a>
-                </td>
-                <td th:text="${project.status.title}"></td>
-                <td></td>
-                <td>
-                    <button><a th:href="@{/projects/edit/{id}(id = ${project.projectId})}">Edit</a></button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <!-- Project List -->
+        <div class="jumbotron-fluid">
+            <h1>List of projects</h1>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-borderless table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Project ID</th>
+                    <th>Project Name</th>
+                    <th>Project Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="project : ${projects}">
+                    <th scope="row" th:text="${project.projectId}"></th>
+                    <td>
+                        <a style="color: black" th:href="@{/projects/{id}/tasks (id = ${project.projectId})}"
+                           th:text="${project.name}"></a>
+                    </td>
+
+                    <td th:text="${project.status.title}"></td>
+
+                    <td>
+                        <button class="btn btn-warning btn-sm">
+                            <a th:href="@{/projects/edit/{id}(id = ${project.projectId})}">Edit</a>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 </body>

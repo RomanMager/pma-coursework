@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headFragment}">
+    <title id="pageTitle">Edit employee</title>
+</head>
+<body>
+    <div th:remove="tag" th:replace="~{fragments/navbar :: navbar}"></div>
+    <br>
+    <br>
+
+    <div class="container">
+        <!-- User edit form -->
+        <form class=""
+              method="post"
+              th:action="@{/employee/update/{id}(id = ${employee.id})}"
+              th:object="${employee}">
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="employee-email">Email</label>
+                    <input class="form-control" id="employee-email" placeholder="Email" th:field="*{email}" type="email">
+                </div>
+                <div class="form-group">
+                    <label for="employee-login">Login</label>
+                    <input class="form-control" id="employee-login" placeholder="Login" th:field="*{login}" type="text">
+
+                </div>
+                <div class="form-group">
+                    <label for="employee-password" hidden>Password</label>
+                    <input class="form-control" hidden id="employee-password" placeholder="password"
+                           th:field="*{password}" type="password">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="employee-first-name">First Name:</label>
+                    <input class="form-control" id="employee-first-name" placeholder="John" th:field="*{firstName}"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <label for="employee-last-name">Last Name:</label>
+                    <input class="form-control" id="employee-last-name" placeholder="Doe" th:field="*{lastName}"
+                           type="text">
+                </div>
+            </div>
+
+            <!-- Todo: add activity radio-button -->
+            <div class="form-row">
+                <label class="form-check-label" for="is-active-checkbox">Activate employee profile</label>
+                <input class="form-check-input" id="is-active-checkbox" th:field="*{active}"
+                       type="checkbox">
+            </div>
+
+            <div class="form-group">
+                <label for="user-roles">Choose user roles:</label>
+                <select class="form-control" id="user-roles" multiple="multiple" th:field="*{roles}">
+                    <option th:each="role : ${availableRoles}"
+                            th:text="${role.name()}"
+                            th:value="${role.getAuthority()}">
+                    </option>
+                </select>
+            </div>
+
+            <p>
+                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-warning" type="reset">Reset</button>
+            </p>
+        </form>
+
+        <!-- Delete employee button-->
+        <button class="btn btn-danger" type="submit">
+            <a th:href="@{/employee/delete/{id} (id = ${employee.id})}">
+                Delete Employee
+            </a>
+        </button>
+
+        <form method="post"
+              th:action="@{/employee/export/{id}/type (id = ${employee.id})}">
+            <button class="btn btn-info" th:name="type" th:value="json" type="submit">
+                Export Data Employee in JSON
+            </button>
+        </form>
+
+
+        <form method="post"
+              th:action="@{/employee/export/{id}/type (id = ${employee.id})}">
+            <button class="btn btn-info" th:name="type" th:value="xml" type="submit">
+                Export Data Employee in XML
+            </button>
+        </form>
+    </div>
+</body>
+</html>
