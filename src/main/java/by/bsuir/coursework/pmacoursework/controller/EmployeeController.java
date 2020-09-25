@@ -3,19 +3,18 @@ package by.bsuir.coursework.pmacoursework.controller;
 import by.bsuir.coursework.pmacoursework.entity.Employee;
 import by.bsuir.coursework.pmacoursework.entity.Role;
 import by.bsuir.coursework.pmacoursework.repository.EmployeeRepository;
+import by.bsuir.coursework.pmacoursework.util.DataExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,10 +24,12 @@ import java.util.List;
 public class EmployeeController {
 
     private final EmployeeRepository employeeRepository;
+    private final DataExporter dataExporter;
 
     @Autowired
-    public EmployeeController(EmployeeRepository employeeRepository) {
+    public EmployeeController(EmployeeRepository employeeRepository, DataExporter dataExporter) {
         this.employeeRepository = employeeRepository;
+        this.dataExporter = dataExporter;
     }
 
     @GetMapping(value = "/all")
@@ -90,6 +91,22 @@ public class EmployeeController {
     @GetMapping(value = "/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeRepository.deleteById(id);
+
+        return "redirect:/employee/all";
+    }
+
+    @PostMapping(value = "/export/{id}/type")
+    public String exportEmployeeData(@PathVariable Long id, @RequestParam String type) throws IOException {
+        Employee employee = employeeRepository.findById(id).get();
+
+        switch (type.toLowerCase()) {
+            case "json":
+                dataExporter.jsonExporter(employee);
+                break;
+            case "xml":
+                dataExporter.xmlExporter(employee);
+                break;
+        }
 
         return "redirect:/employee/all";
     }

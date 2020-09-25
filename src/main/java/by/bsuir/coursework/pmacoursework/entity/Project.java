@@ -28,7 +28,7 @@ public class Project {
     @Size(max = 400)
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "status_id")
     private ProjectStatus status;
 

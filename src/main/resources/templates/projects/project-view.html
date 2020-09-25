@@ -20,7 +20,7 @@
             <h5>Description:</h5>
             <p th:text="${project.description}"></p>
 
-            <button class="btn btn-warning">
+            <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-warning">
                 <a th:href="@{/projects/edit/{id} (id = ${project.projectId})}">Edit</a>
             </button>
 

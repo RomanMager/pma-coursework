@@ -73,6 +73,21 @@
                 Delete Employee
             </a>
         </button>
+
+        <form method="post"
+              th:action="@{/employee/export/{id}/type (id = ${employee.id})}">
+            <button class="btn btn-info" th:name="type" th:value="json" type="submit">
+                Export Data Employee in JSON
+            </button>
+        </form>
+
+
+        <form method="post"
+              th:action="@{/employee/export/{id}/type (id = ${employee.id})}">
+            <button class="btn btn-info" th:name="type" th:value="xml" type="submit">
+                Export Data Employee in XML
+            </button>
+        </form>
     </div>
 </body>
 </html>
